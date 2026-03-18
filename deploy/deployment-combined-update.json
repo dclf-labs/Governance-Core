@@ -1,0 +1,22 @@
+{
+  "contracts": {
+    "noon": "0xD3F58365428F9325d13787a405f846374a58A0fB",
+    "stakeNOON": "0x5f9ee665830BE17b2073a9800Eb7bbbe51b471D7",
+    "stakeNOONVesting": "0x56993afd8CdF9409ACf3b3AA96F0C10595a070D2"
+  },
+  "timestamp": "2026-02-03T13:50:19.149Z",
+  "merkleRoot": {
+    "merkleRoot": "0x4fbd2f42bc1d1d056fe4b6114adf1c0cffdbd98505de5e48779402d60a13f101",
+    "totalAmount": "740000.0",
+    "previousMerkleRoot": "0x35f28b909c46070d3c1f808ea1fabdc9a47b62f70239203f94fcd5957b71a12c",
+    "previousTotalClaimable": "2099594.155121547307839206",
+    "newTotalClaimable": "2839594.155121547307839206"
+  },
+  "vestingAllocation": {
+    "previousAllocation": "103230000.0",
+    "amountAdded": "6660000.0",
+    "newAllocation": "109890000.0",
+    "previousTotalClaimed": "0.0",
+    "newTotalClaimed": "0.0"
+  }
+}

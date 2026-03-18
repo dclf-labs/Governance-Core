@@ -1,0 +1,67 @@
+name: cd
+
+on: [push, pull_request]
+
+env:
+  SOLC_VERSION: ${{ secrets.SOLC_VERSION || '0.8.30' }}
+  SOLIDITY_OPTIMIZER: ${{ secrets.SOLIDITY_OPTIMIZER || '200' }}
+
+jobs:
+  cd:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [20.18.0]
+        python: ['3.10']  # String required: numeric 3.10 parses as 3.1 in YAML
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify Changed sol files in the contracts directory
+        uses: tj-actions/verify-changed-files@v9
+        id: verify-changed-sol-files
+        with:
+          files: contracts/*.sol
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install Analyzer tools
+        if: steps.verify-changed-sol-files.outputs.files_changed == 'true'
+        run: |
+          pip3 install slither-analyzer
+          pip3 install mythril
+
+      - name: Setup Solc
+        if: steps.verify-changed-sol-files.outputs.files_changed == 'true'
+        run: |
+          sudo apt-get -y install libssl-dev python3-dev python3-pip
+          pip3 install solc-select
+          solc-select install ${{ env.SOLC_VERSION }}
+          solc-select use ${{ env.SOLC_VERSION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies with dev deps
+        run: yarn install
+
+      - name: Hardhat compile
+        run: yarn hardhat compile --force
+
+      - name: Tests
+        run: yarn hardhat test --no-compile
+
+      - name: Linters & Formatters
+        run: yarn hook:pre-push
+
+      - name: Analyze to contracts
+        if: steps.verify-changed-sol-files.outputs.files_changed == 'true'
+        run: slither contracts/ && myth analyze --solc-json mythril.config.json contracts/*.sol

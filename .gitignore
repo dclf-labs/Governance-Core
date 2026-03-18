@@ -1,0 +1,33 @@
+node_modules
+.env
+
+# Coverage
+coverage
+coverage.json
+
+# Typescript
+typechain
+typechain-types
+
+# Logs
+/logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Hardhat files
+artifacts
+cache
+
+# Auto-generated files
+soldata
+docs
+storageLayout
+
+# zkSync files
+artifacts-zk
+cache-zk
+.zksolc-*.json
+.zksolc-libraries-cache
+.upgradable
